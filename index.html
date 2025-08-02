@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Login</title>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: Arial;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    input, button {
+      padding: 12px;
+      margin: 8px;
+      font-size: 16px;
+      width: 250px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>User Login</h2>
+  <input type="text" id="name" placeholder="Enter your name" required />
+  <input type="password" id="password" placeholder="Enter password" required />
+  <button onclick="loginUser()">Login</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    async function loginUser() {
+      const name = document.getElementById("name").value;
+      const password = document.getElementById("password").value;
+
+      const response = await fetch("https://script.google.com/macros/s/AKfycbyhylYNVKOsiBpPJ0lHfxzhR0vYXSsJ-kZBnkER5tudWLyt7zOyFqdk2qQY0c-DWDjxJg/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `name=${encodeURIComponent(name)}&password=${encodeURIComponent(password)}`
+      });
+
+      const result = await response.json();
+
+      const resultDiv = document.getElementById("result");
+      if (result.success) {
+        resultDiv.innerHTML = `
+          ✅ <strong>Login successful!</strong><br/>
+          📞 Contact: ${result.contact}<br/>
+          🎸 Class: ${result.class}<br/>
+          📋 Status: ${result.status}
+        `;
+      } else {
+        resultDiv.innerHTML = "❌ Invalid name or password.";
+      }
+    }
+  </script>
+</body>
+</html>
